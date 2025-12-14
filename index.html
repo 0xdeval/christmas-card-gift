@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy new year</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #c0392b; /* Red */
+        --gold: #f1c40f;
+        --glass: rgba(255, 255, 255, 0.15);
+        --glass-border: rgba(255, 255, 255, 0.3);
+        --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+        font-family: "Poppins", sans-serif;
+        color: white;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Mountains of Christmas", cursive;
+      }
+
+      /* --- Snow Effect --- */
+      #snow-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .snowflake {
+        position: absolute;
+        top: -10px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(105vh);
+        }
+      }
+
+      /* --- Layout --- */
+      section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      /* --- Section 1: Intro --- */
+      .intro h1 {
+        font-size: 5rem;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        animation: fadeIn 3s ease-in-out;
+      }
+      .intro p {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        opacity: 0.8;
+      }
+      .scroll-hint {
+        position: absolute;
+        bottom: 30px;
+        animation: bounce 2s infinite;
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+
+      /* --- Section 2: THE MAGIC ORNAMENTS (UPDATED) --- */
+      #wishes {
+        perspective: 1000px; /* Needed for 3D flip */
+        overflow: hidden;
+      }
+
+      .wire {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .ornaments-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align to top so strings hang down */
+        gap: 2rem;
+        flex-wrap: wrap;
+        padding-top: 50px;
+        width: 100%;
+      }
+
+      /* The container for string + ball */
+      .ornament-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Sway Animation Setup */
+        transform-origin: top center;
+        animation: sway 3s ease-in-out infinite alternate;
+      }
+
+      /* Randomize sway delays so they don't move in sync */
+      .ornament-wrapper:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .ornament-wrapper:nth-child(2) {
+        animation-delay: 1s;
+        margin-top: 40px;
+      } /* Staggered height */
+      .ornament-wrapper:nth-child(3) {
+        animation-delay: 0.5s;
+      }
+
+      /* The String */
+      .string {
+        width: 2px;
+        height: 60px; /* Base height */
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 5px white;
+      }
+      .ornament-wrapper:nth-child(2) .string {
+        height: 100px;
+      } /* Longer string for middle */
+
+      /* The 3D Ball */
+      .bauble {
+        width: 220px;
+        height: 220px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        border-radius: 50%;
+      }
+
+      .ornament-wrapper:hover .bauble {
+        transform: rotateY(180deg);
+      }
+
+      /* Pause swaying on hover so it's easier to read */
+      .ornament-wrapper:hover {
+        animation-play-state: paused;
+      }
+
+      /* Common styles for Front and Back of the ball */
+      .face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        backface-visibility: hidden; /* Hides the back when facing away */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: var(--glass);
+        backdrop-filter: blur(8px);
+        border: 2px solid var(--glass-border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+          inset 0 0 20px rgba(255, 255, 255, 0.2);
+        padding: 20px;
+      }
+
+      /* Front Face */
+      .front {
+        z-index: 2;
+      }
+      .front h3 {
+        font-size: 3.5rem;
+        color: white;
+        text-shadow: 0 0 10px var(--gold);
+      }
+      .front span {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+
+      /* Back Face (The Wish) */
+      .back {
+        transform: rotateY(180deg);
+        background: rgba(
+          255,
+          255,
+          255,
+          0.25
+        ); /* Slightly more opaque for reading */
+        color: #fff;
+      }
+      .back p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Cap on top of the bauble */
+      .bauble::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 15px;
+        background: var(--gold);
+        border-radius: 3px;
+        z-index: 10;
+      }
+
+      @keyframes sway {
+        0% {
+          transform: rotate(3deg);
+        }
+        100% {
+          transform: rotate(-3deg);
+        }
+      }
+
+      /* --- Section 3: The Gift --- */
+      .gift-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .box-body {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 150px;
+        background: var(--primary);
+        border-radius: 0 0 10px 10px;
+        box-shadow: inset 0 -20px rgba(0, 0, 0, 0.2);
+      }
+      .box-lid {
+        position: absolute;
+        top: 20px;
+        left: -10px;
+        width: 220px;
+        height: 60px;
+        background: #e74c3c;
+        border-radius: 5px;
+        z-index: 2;
+        transition: transform 0.5s ease-in-out, opacity 0.5s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .ribbon-vertical {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 100%;
+        background: var(--gold);
+      }
+      .ribbon-horizontal {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 30px;
+        background: var(--gold);
+      }
+
+      .gift-container:hover {
+        animation: shake 0.5s infinite;
+      }
+      @keyframes shake {
+        0% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(2deg);
+        }
+        50% {
+          transform: rotate(0deg);
+        }
+        75% {
+          transform: rotate(-2deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+
+      .gift-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: white;
+        color: #333;
+        padding: 2rem;
+        border-radius: 15px;
+        width: 300px;
+        z-index: 5;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-align: center;
+        box-shadow: 0 0 50px var(--gold);
+      }
+      .gift-message h2 {
+        color: var(--primary);
+        font-size: 2.5rem;
+      }
+      .gift-message p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .open .box-lid {
+        transform: translateY(-120px) rotate(-10deg);
+        opacity: 0;
+      }
+      .open .gift-container {
+        animation: none;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .message-visible {
+        transform: translate(-50%, -50%) scale(1) !important;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(10px);
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Mobile Responsive Adjustments */
+      @media (max-width: 768px) {
+        .intro h1 {
+          font-size: 3rem;
+        }
+        .ornaments-container {
+          flex-direction: column;
+          align-items: center;
+          padding-top: 0;
+          gap: 4rem;
+        }
+        .string {
+          height: 30px !important;
+        } /* Short strings on mobile */
+        .ornament-wrapper {
+          margin-top: 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="snow-container"></div>
+
+    <section class="intro">
+      <h1>Happy new year</h1>
+      <p>Be the best version of yourself in 2026</p>
+      <div class="scroll-hint">Scroll Down</div>
+    </section>
+
+    <section id="wishes">
+      <div class="wire"></div>
+
+      <h2
+        style="
+          font-size: 2.5rem;
+          margin-bottom: 1rem;
+          text-shadow: 0 0 10px gold;
+        "
+      >
+        Touch an ornament
+      </h2>
+
+      <div class="ornaments-container">
+        <div class="ornament-wrapper">
+          <div class="string"></div>
+          <div class="bauble">
+            <div class="face front">
+              <h3>☀️</h3>
+              <span>Warm</span>
+            </div>
+            <div class="face back">
+              <p>"Be the sun of people in upcoming year"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ornament-wrapper">
+          <div class="string"></div>
+          <div class="bauble">
+            <div class="face front">
+              <h3>❤️</h3>
+              <span>Love</span>
+            </div>
+            <div class="face back">
+              <p>"You're the best person in my whole life"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ornament-wrapper">
+          <div class="string"></div>
+          <div class="bauble">
+            <div class="face front">
+              <h3>✨</h3>
+              <span>Joy</span>
+            </div>
+            <div class="face back">
+              <p>"Enjoy the whole upcoming yearn and more. You're the best!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gift-section">
+      <h2 style="font-size: 2.5rem; margin-bottom: 3rem">
+        An finally a special gift for you
+      </h2>
+
+      <div class="gift-container" onclick="openGift()">
+        <div class="box-body">
+          <div class="ribbon-vertical"></div>
+        </div>
+        <div class="box-lid">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+        </div>
+      </div>
+
+      <div class="gift-message" id="message">
+        <h2>Surprise!</h2>
+        <p>Each princess should have a castle! You're in Disneyland!</p>
+        <p style="font-size: 0.9rem; margin-top: 10px; color: #666">
+          (Pack your bags!)
+        </p>
+      </div>
+    </section>
+
+    <script>
+      // 1. Snow Generation
+      function createSnow() {
+        const container = document.getElementById("snow-container");
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+          const flake = document.createElement("div");
+          flake.classList.add("snowflake");
+          const x = Math.random() * 100;
+          const delay = Math.random() * 5;
+          const duration = Math.random() * 10 + 5;
+          const size = Math.random() * 5 + 2;
+          flake.style.left = `${x}vw`;
+          flake.style.animationDelay = `${delay}s`;
+          flake.style.animationDuration = `${duration}s`;
+          flake.style.width = `${size}px`;
+          flake.style.height = `${size}px`;
+          container.appendChild(flake);
+        }
+      }
+
+      // 2. Gift Opening
+      function openGift() {
+        const giftBox = document.querySelector(".gift-container");
+        const message = document.getElementById("message");
+        giftBox.classList.add("open");
+        setTimeout(() => {
+          message.classList.add("message-visible");
+        }, 500);
+      }
+
+      window.onload = createSnow;
+    </script>
+  </body>
+</html>
